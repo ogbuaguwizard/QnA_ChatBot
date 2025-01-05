@@ -51,7 +51,7 @@ model_links = {
     "GPT-2": {
         "url": "https://drive.google.com/uc?id=1EAlQFw9wxi0-9WVEU6t9GlsbAirwms4Z&export=download",
         "output_dir": "./models/gpt2_fine_tuned",
-        "zip_file_name": "gpt2_model.zip",
+        "zip_file_name": "gpt2-finetuned.zip",
     },
     # "T5": {
     #     "url": "https://drive.google.com/uc?id=1xyzT5model1234&export=download",
