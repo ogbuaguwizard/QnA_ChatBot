@@ -1,8 +1,14 @@
 import os
 import requests
 import zipfile
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, AutoModelForCausalLM
 import streamlit as st
+from transformers import (
+    GPT2LMHeadModel,
+    GPT2Tokenizer,
+    AutoTokenizer,
+    AutoModelForSeq2SeqLM,
+)
+
 from time import sleep
 
 # Function to download and extract models
@@ -40,22 +46,22 @@ def download_and_extract(url, output_dir, zip_file_name, retries=3, delay=5):
                     print(f"Error extracting {zip_file_name}: {e}")
                     break
 
-# Google Drive direct download links for the models
+# Model configuration
 model_links = {
     "GPT-2": {
         "url": "https://drive.google.com/uc?id=1EAlQFw9wxi0-9WVEU6t9GlsbAirwms4Z&export=download",
-        "output_dir": "gpt2-finetuned",
-        "zip_file_name": "gpt2-finetuned.zip",
+        "output_dir": "./models/gpt2_fine_tuned",
+        "zip_file_name": "gpt2_model.zip",
     },
     # "T5": {
-    #     "url": "https://drive.google.com/uc?id=YOUR_GPT2_MODEL_ID&export=download",,
+    #     "url": "https://drive.google.com/uc?id=1xyzT5model1234&export=download",
     #     "output_dir": "./models/t5_fine_tuned",
     #     "zip_file_name": "t5_model.zip",
     # },
-    # "BART": {
-    #     "url": "https://drive.google.com/uc?id=YOUR_BART_MODEL_ID&export=download",
-    #     "output_dir": "./models/bart_fine_tuned",
-    #     "zip_file_name": "bart_model.zip",
+    # "BERT": {
+    #     "url": "https://drive.google.com/uc?id=1xyzBertmodel5678&export=download",
+    #     "output_dir": "./models/bert_fine_tuned",
+    #     "zip_file_name": "bert_model.zip",
     # },
 }
 
@@ -63,36 +69,54 @@ model_links = {
 for model_name, model_info in model_links.items():
     download_and_extract(model_info["url"], model_info["output_dir"], model_info["zip_file_name"])
 
-# Load models and tokenizers
+# Load the fine-tuned models and tokenizers
 models = {
-    "GPT-2": AutoModelForCausalLM.from_pretrained(model_links["GPT-2"]["output_dir"]),
-    # "T5": AutoModelForSeq2SeqLM.from_pretrained(model_links["T5"]["output_dir"]),
-    # "BART": AutoModelForSeq2SeqLM.from_pretrained(model_links["BART"]["output_dir"]),
+    "GPT-2": {
+        "model": GPT2LMHeadModel.from_pretrained(model_links["GPT-2"]["output_dir"]),
+        "tokenizer": GPT2Tokenizer.from_pretrained(model_links["GPT-2"]["output_dir"]),
+    },
+    # "T5": {
+    #     "model": AutoModelForSeq2SeqLM.from_pretrained(model_links["T5"]["output_dir"]),
+    #     "tokenizer": AutoTokenizer.from_pretrained(model_links["T5"]["output_dir"]),
+    # },
+    # "BERT": {
+    #     "model": AutoModelForSeq2SeqLM.from_pretrained(model_links["BERT"]["output_dir"]),
+    #     "tokenizer": AutoTokenizer.from_pretrained(model_links["BERT"]["output_dir"]),
+    # },
 }
 
-tokenizers = {
-    "GPT-2": AutoTokenizer.from_pretrained(model_links["GPT-2"]["output_dir"]),
-    # "T5": AutoTokenizer.from_pretrained(model_links["T5"]["output_dir"]),
-    # "BART": AutoTokenizer.from_pretrained(model_links["BART"]["output_dir"]),
-}
+# Chat function
+def chat(model_name, input_text):
+    model = models[model_name]["model"]
+    tokenizer = models[model_name]["tokenizer"]
+
+    if model_name == "GPT-2":
+        input_ids = tokenizer(f"User: {input_text} \nAI:", return_tensors="pt").input_ids
+        output = model.generate(input_ids, max_length=150, num_return_sequences=1, pad_token_id=tokenizer.eos_token_id)
+        response = tokenizer.decode(output[0], skip_special_tokens=True)
+        return response.split("AI:")[1].strip()
+
+    elif model_name in ["T5", "BERT"]:
+        input_ids = tokenizer(input_text, return_tensors="pt", max_length=512, truncation=True).input_ids
+        outputs = model.generate(input_ids, max_length=150, num_return_sequences=1, num_beams=5, early_stopping=True)
+        response = tokenizer.decode(outputs[0], skip_special_tokens=True)
+        return response.strip()
 
 # Streamlit Interface
-st.title("QnA Model Demo")
-st.subheader("Choose a model for generating answers:")
+st.title("Fine-Tuned Language Models Demo")
+st.subheader("Choose a model and ask your question:")
 
 # Model selection
-model_option = st.selectbox("Select Model", ["GPT-2"])
+model_option = st.selectbox("Select Model", ["GPT-2", "T5", "BERT"])
 
 # Input
-user_input = st.text_area("Enter your question:")
+user_input = st.text_area("Type your question here:")
 
-# Inference
-if st.button("Generate Answer"):
-    model = models[model_option]
-    tokenizer = tokenizers[model_option]
-    
-    inputs = tokenizer.encode(user_input, return_tensors="pt", max_length=512, truncation=True)
-    outputs = model.generate(inputs, max_length=128, num_return_sequences=1, num_beams=5, early_stopping=True)
-    answer = tokenizer.decode(outputs[0], skip_special_tokens=True)
-    
-    st.success(f"Answer ({model_option}): {answer}")
+# Generate Response
+if st.button("Generate Response"):
+    if user_input.strip():
+        with st.spinner(f"Generating response using {model_option}..."):
+            answer = chat(model_option, user_input)
+        st.success(f"AI ({model_option}): {answer}")
+    else:
+        st.warning("Please enter a question or message.")
