@@ -22,21 +22,21 @@ def download_and_extract(url, output_dir, zip_file_name):
 
 # Google Drive direct download links for the models
 model_links = {
-    "T5": {
-        "url": "https://drive.google.com/uc?id=1EAlQFw9wxi0-9WVEU6t9GlsbAirwms4Z&export=download",
-        "output_dir": "./models/t5_fine_tuned",
-        "zip_file_name": "t5_model.zip",
-    },
     "GPT-2": {
-        "url": "https://drive.google.com/uc?id=YOUR_GPT2_MODEL_ID&export=download",
+        "url": "https://drive.google.com/uc?id=1EAlQFw9wxi0-9WVEU6t9GlsbAirwms4Z&export=download",
         "output_dir": "./models/gpt2_fine_tuned",
         "zip_file_name": "gpt2_model.zip",
-    },
-    "BART": {
-        "url": "https://drive.google.com/uc?id=YOUR_BART_MODEL_ID&export=download",
-        "output_dir": "./models/bart_fine_tuned",
-        "zip_file_name": "bart_model.zip",
-    },
+    },  
+    # "T5": {
+    #     "url": "https://drive.google.com/uc?id=YOUR_GPT2_MODEL_ID&export=download",,
+    #     "output_dir": "./models/t5_fine_tuned",
+    #     "zip_file_name": "t5_model.zip",
+    # },
+    # "BART": {
+    #     "url": "https://drive.google.com/uc?id=YOUR_BART_MODEL_ID&export=download",
+    #     "output_dir": "./models/bart_fine_tuned",
+    #     "zip_file_name": "bart_model.zip",
+    # },
 }
 
 # Download and extract all models
