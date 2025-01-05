@@ -50,7 +50,7 @@ def download_and_extract(url, output_dir, zip_file_name, retries=3, delay=5):
 model_links = {
     "GPT-2": {
         "url": "https://drive.google.com/uc?id=1EAlQFw9wxi0-9WVEU6t9GlsbAirwms4Z&export=download",
-        "output_dir": "gpt2_fine_tuned/gpt2_fine_tuned",
+        "output_dir": "gpt2-finetuned/gpt2-finetuned",
         "zip_file_name": "gpt2-finetuned.zip",
     },
     # "T5": {
