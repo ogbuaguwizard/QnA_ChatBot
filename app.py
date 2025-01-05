@@ -12,9 +12,9 @@ import streamlit as st
 
 # Define model paths
 MODEL_PATHS = {
-    "GPT-2": "model/gpt2-finetuned",
-    "T5": "model/T5-finetuned",
-    "BERT": "model/BERT-finetuned",
+    "GPT-2": "models/gpt2-finetuned",
+    "T5": "models/T5-finetuned",
+    "BERT": "models/BERT-finetuned",
 }
 
 # Load models and tokenizers
