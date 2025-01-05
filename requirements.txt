@@ -1,4 +1,4 @@
 transformers==4.33.0
-torch==2.0.1
+torch
 streamlit==1.24.1
 requests
