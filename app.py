@@ -47,7 +47,16 @@ model_links = {
         "output_dir": "./models/gpt2-finetuned",
         "zip_file_name": "gpt2-finetuned.zip",
     },
-    # Add other models here (e.g., T5, BART) if needed.
+    # "T5": {
+    #     "url": "https://drive.google.com/uc?id=YOUR_GPT2_MODEL_ID&export=download",,
+    #     "output_dir": "./models/t5_fine_tuned",
+    #     "zip_file_name": "t5_model.zip",
+    # },
+    # "BART": {
+    #     "url": "https://drive.google.com/uc?id=YOUR_BART_MODEL_ID&export=download",
+    #     "output_dir": "./models/bart_fine_tuned",
+    #     "zip_file_name": "bart_model.zip",
+    # },
 }
 
 # Download and extract all models
