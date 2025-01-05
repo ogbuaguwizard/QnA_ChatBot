@@ -1,4 +1,4 @@
---no-binary :all:
+# --no-binary :all:
 transformers
 torch==2.5.1
 streamlit==1.24.1
