@@ -1,6 +1,7 @@
-transformers==4.33.0
+transformers
 torch==2.5.1
 streamlit==1.24.1
 pillow==9.3.0
-tokenizers==0.13.3
-requests==2.28.1
+tokenizers
+requests
+# requests==2.28.1
