@@ -44,8 +44,8 @@ def download_and_extract(url, output_dir, zip_file_name, retries=3, delay=5):
 model_links = {
     "GPT-2": {
         "url": "https://drive.google.com/uc?id=1EAlQFw9wxi0-9WVEU6t9GlsbAirwms4Z&export=download",
-        "output_dir": "./models/gpt2_fine_tuned",
-        "zip_file_name": "gpt2_model.zip",
+        "output_dir": "./models/gpt2-finetuned",
+        "zip_file_name": "gpt2-finetuned.zip",
     },
     # Add other models here (e.g., T5, BART) if needed.
 }
