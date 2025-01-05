@@ -2,23 +2,23 @@ import os
 import requests
 import zipfile
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, AutoModelForCausalLM
+import streamlit as st
 
+# Function to download and extract models
 def download_and_extract(url, output_dir, zip_file_name):
     """
     Download and extract a zip file if the folder doesn't already exist.
     """
     if not os.path.exists(output_dir):
-        print(f"Downloading and extracting {zip_file_name}...")
-        response = requests.get(url, stream=True)
-        with open(zip_file_name, "wb") as f:
-            for chunk in response.iter_content(chunk_size=1024):
-                if chunk:
-                    f.write(chunk)
-        with zipfile.ZipFile(zip_file_name, "r") as zip_ref:
-            zip_ref.extractall("./models")
-        os.remove(zip_file_name)
-    else:
-        print(f"{output_dir} already exists.")
+        with st.spinner(f"Downloading and extracting {zip_file_name}..."):
+            response = requests.get(url, stream=True)
+            with open(zip_file_name, "wb") as f:
+                for chunk in response.iter_content(chunk_size=1024):
+                    if chunk:
+                        f.write(chunk)
+            with zipfile.ZipFile(zip_file_name, "r") as zip_ref:
+                zip_ref.extractall("./models")
+            os.remove(zip_file_name)
 
 # Google Drive direct download links for the models
 model_links = {
@@ -57,8 +57,6 @@ tokenizers = {
 }
 
 # Streamlit Interface
-import streamlit as st
-
 st.title("QnA Model Demo")
 st.subheader("Choose a model for generating answers:")
 
